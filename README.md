@@ -9,3 +9,7 @@ A little software that can help generate a player for the tabletop game Dungeons
 - Backstory generation
 - Starter abilities generation
 - Stat generation (Dexterity, Constitution, Strength, etc...)
+
+<div align="center">
+  <img height="350" src=https://artificialtwenty.com/wp-content/uploads/2024/08/dnd-2024-players-handbook.jpg?w=1024>
+</div>
