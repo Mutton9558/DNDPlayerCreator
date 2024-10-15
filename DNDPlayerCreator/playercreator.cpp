@@ -12,7 +12,9 @@ program to ease your burden. You're Welcome. */
 #include <cstdlib>  // For rand() and srand()
 #include <ctime>    // For time()
 #include <ctype.h>
+#include <conio.h> 
 
+// Name generation function.
 std::string nameGenerator(){
     std::srand(std::time(0));
     int incrementerNum = 1 + std::rand() % 2;
@@ -44,6 +46,7 @@ std::string nameGenerator(){
     return name;
 }
 
+// Race Generation Function
 std::string raceGenerator(){
 
     int traitAnswer;
@@ -118,13 +121,13 @@ std::string raceGenerator(){
         return "Idiot";
     }
 
-    int temp = 3;
+    int temp = 0;
     int arrOfChances[4] = {dwarfChance, elfChance, halflingChance, humanChance}; 
 
     for (int i = 0; i < 4; i++){
         if (i == 3) {
             break;
-        } else if (arrOfChances[i] < arrOfChances[i+1]){
+        } else if (arrOfChances[temp] < arrOfChances[i+1]){
             temp = i+1;
         } else {
             continue;
@@ -132,6 +135,21 @@ std::string raceGenerator(){
     }
     return raceSelection[temp];
     
+}
+
+std::string classGenerator(std::string race){
+    std::string classList[12] = {"Barbarian", "Fighter", "Ranger", "Rogue", "Monk", "Bard", "Paladin", "Sorcerer", "Cleric", "Druid", "Warlock", "Wizard"};
+    std::srand(std::time(0));
+
+    if (race == "Dwarf"){
+        return classList[std::rand() % 3];
+    } else if (race == "Elf") {
+        return classList[8 + std::rand()% 4];
+    } else if (race == "Halfling") {
+        return classList[2 + std::rand()%4];
+    } else {
+        return classList[std::rand()%8];
+    }
 }
 
 int main(){
@@ -142,7 +160,7 @@ int main(){
     std::cout << "Welcome to Dungeons and Dragons (DND) Player Creator!" << std::endl;
     std::cout << "------------------------------------------------------" << std::endl;
     std::cout << "1. New Character" << std::endl;
-    std::cout << "2. Randomiser Settings" << std::endl;
+    std::cout << "2. Randomiser Settings (Currently unavailable)" << std::endl;
     std::cout << "3. Abort Program" << std::endl;
     std::cout << "Please enter a choice: " << std::endl;
     std::cin >> mainMenuChoice;
@@ -157,6 +175,7 @@ int main(){
         #endif
 
         char answer;  // Declare the variable
+        char placeholder;
         std::string name = nameGenerator();
 
         // User's name
@@ -170,7 +189,18 @@ int main(){
         std::cout << "You are born of the " << (race + " race.") << std::endl;
         std::cout << "\n" << std::endl;
 
-        sleep(3);
+        // User's class
+        std::cout << "Next, let us determine your class!" << std::endl;
+        std::string classChoice = classGenerator(race);
+        std::cout << "The class that the great Mutton has chosen for thee is the " << (classChoice + " class.") << std::endl;
+        std::cout << "\n" << std::endl;
+        std::cout << "Press enter or enter any key to continue!" << std::endl;
+        #if defined(_WIN32) || defined(_WIN64)
+            _getch();
+        #else 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores everything until Enter is pressed
+        #endif  // Waits for any key press, works on Windows systems
+
         #if defined(_WIN32) || defined(_WIN64)
             system("cls");
         #else 
@@ -181,6 +211,7 @@ int main(){
         std::cout << "------------------------------------------------------" << std::endl;
         std::cout << "Name: " << name << std::endl;
         std::cout << "Race: " << race << std::endl;
+        std::cout << "Class: " << classChoice << std::endl;
 
         while (viewState) {
             std::cout << "Stop viewing? [Y/N]" << std::endl;
@@ -195,7 +226,7 @@ int main(){
 
     } else if (mainMenuChoice == 2) {
         std::cout << "Player chose option \"2\", proceeding to Settings screen." << std::endl;
-
+        std::cout << "Setting currently unavailable, come back next time." << std::endl;
     } else if (mainMenuChoice == 3) {
         #if defined(_WIN32) || defined(_WIN64)
             system("cls");
