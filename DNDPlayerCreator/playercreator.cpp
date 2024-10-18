@@ -154,99 +154,128 @@ std::string classGenerator(std::string race){
 
 int main(){
     bool viewState = true;  // Properly initialize bool
+    bool programRun = true;
     int mainMenuChoice;
-
-    // Starting screen
-    std::cout << "Welcome to Dungeons and Dragons (DND) Player Creator!" << std::endl;
-    std::cout << "------------------------------------------------------" << std::endl;
-    std::cout << "1. New Character" << std::endl;
-    std::cout << "2. Randomiser Settings (Currently unavailable)" << std::endl;
-    std::cout << "3. Abort Program" << std::endl;
-    std::cout << "Please enter a choice: " << std::endl;
-    std::cin >> mainMenuChoice;
-
-    if (mainMenuChoice == 1) {
-        std::cout << "Player chose option \"1\", proceeding to New Character screen" << std::endl;
-        sleep(3);
-        #if defined(_WIN32) || defined(_WIN64)
-            system("cls");
-        #else 
-            system("clear");
-        #endif
-
-        char answer;  // Declare the variable
-        char placeholder;
-        std::string name = nameGenerator();
-
-        // User's name
-        std::cout << "First, let's figure out a name for you..." << std::endl;
-        std::cout << "By the blessings of the high one, it is decided that your name shall be..." << (name+".") << std::endl;
-        std::cout << "\n" << std::endl;
-
-        // User's race
-        std::cout << "Next, let us determine your race by asking you some questions!" << std::endl;
-        std::string race = raceGenerator();
-        std::cout << "You are born of the " << (race + " race.") << std::endl;
-        std::cout << "\n" << std::endl;
-
-        // User's class
-        std::cout << "Next, let us determine your class!" << std::endl;
-        std::string classChoice = classGenerator(race);
-        std::cout << "The class that the great Mutton has chosen for thee is the " << (classChoice + " class.") << std::endl;
-        std::cout << "\n" << std::endl;
-        std::cout << "Press enter or enter any key to continue!" << std::endl;
-        #if defined(_WIN32) || defined(_WIN64)
-            _getch();
-        #else 
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores everything until Enter is pressed
-        #endif  // Waits for any key press, works on Windows systems
-
-        #if defined(_WIN32) || defined(_WIN64)
-            system("cls");
-        #else 
-            system("clear");
-        #endif
-
-        std::cout << "Your Character Details:" << std::endl;
+    while (programRun){
+        // Starting screen
+        std::cout << "Welcome to Dungeons and Dragons (DND) Player Creator!" << std::endl;
         std::cout << "------------------------------------------------------" << std::endl;
-        std::cout << "Name: " << name << std::endl;
-        std::cout << "Race: " << race << std::endl;
-        std::cout << "Class: " << classChoice << std::endl;
+        std::cout << "1. New Character" << std::endl;
+        std::cout << "2. Randomiser Settings (Currently unavailable)" << std::endl;
+        std::cout << "3. Abort Program" << std::endl;
+        std::cout << "Please enter a choice: " << std::endl;
+        std::cin >> mainMenuChoice;
 
-        while (viewState) {
-            std::cout << "Stop viewing? [Y/N]" << std::endl;
-            std::cin >> answer;
-            answer = toupper(answer);
-            if (answer == 'Y') {
-                viewState = false;
-            } else {
-                sleep(10);  // If not, wait for 10 seconds
+        if (mainMenuChoice == 1) {
+            std::cout << "Player chose option \"1\", proceeding to New Character screen" << std::endl;
+            sleep(3);
+            #if defined(_WIN32) || defined(_WIN64)
+                system("cls");
+            #else 
+                system("clear");
+            #endif
+
+            char answer;  // Declare the variable
+            char placeholder;
+            std::string name = nameGenerator();
+
+            // User's name
+            std::cout << "First, let's figure out a name for you..." << std::endl;
+            std::cout << "By the blessings of the high one, it is decided that your name shall be..." << (name+".") << std::endl;
+            std::cout << "\n" << std::endl;
+
+            // User's race
+            std::cout << "Next, let us determine your race by asking you some questions!" << std::endl;
+            std::string race = raceGenerator();
+            std::cout << "You are born of the " << (race + " race.") << std::endl;
+            std::cout << "\n" << std::endl;
+
+            // User's class
+            std::cout << "Next, let us determine your class!" << std::endl;
+            std::string classChoice = classGenerator(race);
+            std::cout << "The class that the great Mutton has chosen for thee is the " << (classChoice + " class.") << std::endl;
+            std::cout << "\n" << std::endl;
+            std::cout << "Press enter or enter any key to continue!" << std::endl;
+            #if defined(_WIN32) || defined(_WIN64)
+                _getch();
+            #else 
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores everything until Enter is pressed
+            #endif  // Waits for any key press, works on Windows systems
+
+            #if defined(_WIN32) || defined(_WIN64)
+                system("cls");
+            #else 
+                system("clear");
+            #endif
+
+            std::cout << "Your Character Details:" << std::endl;
+            std::cout << "------------------------------------------------------" << std::endl;
+            std::cout << "Name: " << name << std::endl;
+            std::cout << "Race: " << race << std::endl;
+            std::cout << "Class: " << classChoice << std::endl;
+
+            while (viewState) {
+                std::cout << "Stop viewing? [Y/N]" << std::endl;
+                std::cin >> answer;
+                answer = toupper(answer);
+                if (answer == 'Y') {
+                    viewState = false;
+                } else {
+                    sleep(10);  // If not, wait for 10 seconds
+                }
             }
+
+        } else if (mainMenuChoice == 2) {
+
+            int choice2;
+
+            std::cout << "Player chose option \"2\", proceeding to Settings screen." << std::endl;
+            #if defined(_WIN32) || defined(_WIN64)
+                system("cls");
+            #else 
+                system("clear");
+            #endif
+
+            std::cout << "Randomiser Settings" << std::endl;
+            std::cout << "------------------------------------------------------" << std::endl;
+            std::cout << "(Note that this feature is still experimental and is yet to be completed)" << std::endl;
+            std::cout << "1. Generation Filter" << std::endl;
+            std::cout << "2. Profile Saves" << std::endl;
+            std::cout << "3. Return" << std::endl;
+            std::cout << "Choose an option!" << std::endl;
+            std::cin >> choice2;
+            sleep(2);
+            if (choice2 == 1){
+                std::cout << "Setting currently unavailable, come back next time." << std::endl;
+            } else if (choice2 == 2) {
+                std::cout << "Setting currently unavailable, come back next time." << std::endl;
+            } else if (choice2 == 3){
+                
+            }
+            // For filtration system, save filtered options in a json file. Make the data into a global variable.
+            // Allow users to filter out what race they want as well
+
+        } else if (mainMenuChoice == 3) {
+            #if defined(_WIN32) || defined(_WIN64)
+                system("cls");
+            #else 
+                system("clear");
+            #endif
+            std::cout << "Player chose option \"3\", awaiting program abortion..." << std::endl;
+            sleep(1);
+            std::cout << "Aborting in 3..." << std::endl;
+            sleep(1);
+            std::cout << "Aborting in 2..." << std::endl;
+            sleep(1);
+            std::cout << "Aborting in 1..." << std::endl;
+            sleep(1);
+            std::cout << "Program aborted!";
+            programRun = false;
+            sleep(2);
+
+        } else {
+            std::cout << "Please enter a valid answer!";
         }
-
-    } else if (mainMenuChoice == 2) {
-        std::cout << "Player chose option \"2\", proceeding to Settings screen." << std::endl;
-        std::cout << "Setting currently unavailable, come back next time." << std::endl;
-    } else if (mainMenuChoice == 3) {
-        #if defined(_WIN32) || defined(_WIN64)
-            system("cls");
-        #else 
-            system("clear");
-        #endif
-        std::cout << "Player chose option \"3\", awaiting program abortion..." << std::endl;
-        sleep(1);
-        std::cout << "Aborting in 3..." << std::endl;
-        sleep(1);
-        std::cout << "Aborting in 2..." << std::endl;
-        sleep(1);
-        std::cout << "Aborting in 1..." << std::endl;
-        sleep(1);
-        std::cout << "Program aborted!";
-        sleep(2);
-
-    } else {
-        std::cout << "Please enter a valid answer!";
     }
-
     return 0;
 }
