@@ -26,6 +26,9 @@
 *.a
 *.lib
 
+# Storage file
+*.json
+
 # Executables
 *.exe
 *.out
