@@ -12,7 +12,7 @@ Program that generates a character profile for the popular tabletop game, Dungeo
 
 ## Extra features ##
 - Filtration System.
-- Save character profile and allow access.
+- Save character profile and allow access. ✔️
 
 ## Potential expansion ##
 - Graphical User Interface (GUI)
