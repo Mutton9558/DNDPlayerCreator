@@ -1,6 +1,6 @@
 # Dungeons and Dragons (DND) Player Creator
 ## Overview ##
-A little software that can help generate a player for the tabletop game Dungeons and Dragons. Create your very own character today we just a click of a button!
+Program that generates a character profile for the popular tabletop game, Dungeons and Dragons (DND)
 
 ## Functionality ##
 - Name generation ✔️
