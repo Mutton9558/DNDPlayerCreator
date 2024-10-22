@@ -13,6 +13,11 @@ program to ease your burden. You're Welcome. */
 #include <ctime>    // For time()
 #include <ctype.h>
 #include <conio.h> 
+#include <cctype>  // for isalpha function
+#include <fstream>
+#include "json.hpp"
+
+using json = nlohmann::json;
 
 // Name generation function.
 std::string nameGenerator(){
@@ -152,21 +157,132 @@ std::string classGenerator(std::string race){
     }
 }
 
+int profileSave(){
+    // Open the JSON file
+    std::ifstream inFile("profile.json");
+    if (!inFile.is_open()) {
+        std::cerr << "Failed to open the JSON file." << std::endl;
+        std::cout << "Press enter or enter any key to continue!" << std::endl;
+        #if defined(_WIN32) || defined(_WIN64)
+            _getch();
+        #else 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores everything until Enter is pressed
+        #endif
+        return 1;  // Exit if the file cannot be opened
+    }
+
+    json jArray;
+    inFile >> jArray;  // Assuming the JSON file contains an array of arrays
+    inFile.close();
+
+    // Check if the JSON structure is an array
+    if (!jArray.is_array()) {
+        std::cerr << "Invalid JSON structure. Expected an array of arrays." << std::endl;
+        std::cout << "Press enter or enter any key to continue!" << std::endl;
+        #if defined(_WIN32) || defined(_WIN64)
+            _getch();
+        #else 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores everything until Enter is pressed
+        #endif
+        return 1;  // Exit if the structure is invalid
+    }
+
+    // Display the saved profiles
+    std::cout << "Saved Profiles:" << std::endl;
+    for (size_t i = 0; i < jArray.size(); ++i) {
+        // Check if each character is an array with exactly three elements
+        if (jArray[i].is_array() && jArray[i].size() == 3) {
+            std::cout << (i + 1) << ". " << jArray[i][0] << std::endl;  // Display only the Name
+        } else {
+            std::cerr << "Invalid character structure at index " << i << std::endl;
+        }
+    }
+
+    // Ask the user to choose a character profile to display
+    std::cout << "Choose a character profile to display (1-" << jArray.size() << "):" << std::endl;
+    
+    int ans = 0;  // Initialize ans
+    while (true) {
+        std::cin >> ans;
+        // Check for valid input
+        if (std::cin.fail() || ans < 1 || ans > jArray.size()) {
+            std::cerr << "Invalid choice! Enter a valid integer corresponding to the profile number." << std::endl;
+            std::cin.clear(); // Clear the fail state
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore invalid input
+        } else {
+            break; // Valid input, exit the loop
+        }
+    }
+
+    const json& selectedCharacter = jArray[ans - 1]; // Convert to 0-based index
+    std::cout << "Character " << ans << " Details:" << std::endl;
+    std::cout << "  Name: " << selectedCharacter[0] << std::endl;   // First element
+    std::cout << "  Race: " << selectedCharacter[1] << std::endl;   // Second element
+    std::cout << "  Class: " << selectedCharacter[2] << std::endl;  // Third element
+    std::cout << "\n";
+    std::cout << "Enter any key to return back to setting screen" << std::endl;
+    #if defined(_WIN32) || defined(_WIN64)
+        _getch();
+    #else 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Ignores everything until Enter is pressed
+    #endif
+    return 0;
+}
+
+int menu2() {
+    int choice2;
+    bool view = true;
+
+    while(view){
+        std::cout << "Randomiser Settings" << std::endl;
+        std::cout << "------------------------------------------------------" << std::endl;
+        std::cout << "(Note that this feature is still experimental and is yet to be completed)" << std::endl;
+        std::cout << "1. Generation Filter (Unavailable)" << std::endl;
+        std::cout << "2. Profile Saves" << std::endl;
+        std::cout << "3. Return" << std::endl;
+        std::cout << "Choose an option!" << std::endl;
+        std::cin >> choice2;
+        sleep(2);
+
+        if (choice2 == 1){
+            std::cout << "Setting currently unavailable, come back next time." << std::endl;
+            continue;
+        } else if (choice2 == 2) {
+            std::cout << "Loading saves..." << std::endl;
+            #if defined(_WIN32) || defined(_WIN64)
+                system("cls");
+            #else 
+                system("clear");
+            #endif
+            int load = profileSave();
+            continue;
+        } else if (choice2 == 3){
+            view = false;
+            return 0;
+        }
+    }
+    // For filtration system, save filtered options in a json file. Make the data into a global variable.
+    // Allow users to filter out what race they want as well
+    return 0;
+}
+
 int main(){
-    bool viewState = true;  // Properly initialize bool
     bool programRun = true;
     int mainMenuChoice;
+    json j;
+
     while (programRun){
         // Starting screen
         std::cout << "Welcome to Dungeons and Dragons (DND) Player Creator!" << std::endl;
         std::cout << "------------------------------------------------------" << std::endl;
         std::cout << "1. New Character" << std::endl;
-        std::cout << "2. Randomiser Settings (Currently unavailable)" << std::endl;
+        std::cout << "2. Randomiser Settings" << std::endl;
         std::cout << "3. Abort Program" << std::endl;
         std::cout << "Please enter a choice: " << std::endl;
         std::cin >> mainMenuChoice;
 
         if (mainMenuChoice == 1) {
+            bool viewState = true;
             std::cout << "Player chose option \"1\", proceeding to New Character screen" << std::endl;
             sleep(3);
             #if defined(_WIN32) || defined(_WIN64)
@@ -177,6 +293,7 @@ int main(){
 
             char answer;  // Declare the variable
             char placeholder;
+            char input;
             std::string name = nameGenerator();
 
             // User's name
@@ -214,6 +331,59 @@ int main(){
             std::cout << "Race: " << race << std::endl;
             std::cout << "Class: " << classChoice << std::endl;
 
+            std::cout << "Save profile? [Y/N]: " << std::endl;
+            try{
+                std::cin >> input;
+                if (!std::isalpha(input)) {
+                    throw "Not char";
+                }
+            }
+            catch (const std::string error){
+                std::cout << "Enter a valid input" << std::endl;
+            }
+            if (toupper(input) == 'Y'){
+                std::string profile[3] = {name, race, classChoice};
+                json newProfile = json::array({profile[0], profile[1], profile[2]});
+                std::vector<json> profiles;
+
+                // Read existing profiles from the JSON file
+                std::ifstream inFile("profile.json");
+                if (inFile.is_open()) {
+                    json existingProfiles;
+                    inFile >> existingProfiles;  // Read the existing JSON array
+
+                    // Ensure the existing data is an array
+                    if (existingProfiles.is_array()) {
+                        profiles = existingProfiles.get<std::vector<json>>();  // Convert to vector of JSON arrays
+                    }
+                    inFile.close();
+                } else {
+                    // If the file doesn't exist or couldn't be opened, create a new one
+                    std::ofstream outFile("profile.json");
+                    if (outFile.is_open()) {
+                        outFile << "[]";  // Initialize with an empty JSON array
+                        outFile.close();
+                    } else {
+                        std::cerr << "Unable to create JSON file." << std::endl;
+                        return 1; // Exit if unable to create the file
+                    }
+                }
+
+                // Append the new profile to the existing profiles
+                profiles.push_back(newProfile);
+
+                // Write the updated profiles back to the JSON file
+                std::ofstream outFile("profile.json");
+                if (outFile.is_open()) {
+                    outFile << json(profiles).dump(4);  // Write as a pretty JSON array with indentation
+                    outFile.close();
+                    std::cout << "Profile saved!" << std::endl;
+                } else {
+                    std::cerr << "Unable to save." << std::endl;
+                }
+            }
+            
+
             while (viewState) {
                 std::cout << "Stop viewing? [Y/N]" << std::endl;
                 std::cin >> answer;
@@ -226,35 +396,13 @@ int main(){
             }
 
         } else if (mainMenuChoice == 2) {
-
-            int choice2;
-
             std::cout << "Player chose option \"2\", proceeding to Settings screen." << std::endl;
             #if defined(_WIN32) || defined(_WIN64)
                 system("cls");
             #else 
                 system("clear");
             #endif
-
-            std::cout << "Randomiser Settings" << std::endl;
-            std::cout << "------------------------------------------------------" << std::endl;
-            std::cout << "(Note that this feature is still experimental and is yet to be completed)" << std::endl;
-            std::cout << "1. Generation Filter" << std::endl;
-            std::cout << "2. Profile Saves" << std::endl;
-            std::cout << "3. Return" << std::endl;
-            std::cout << "Choose an option!" << std::endl;
-            std::cin >> choice2;
-            sleep(2);
-            if (choice2 == 1){
-                std::cout << "Setting currently unavailable, come back next time." << std::endl;
-            } else if (choice2 == 2) {
-                std::cout << "Setting currently unavailable, come back next time." << std::endl;
-            } else if (choice2 == 3){
-                
-            }
-            // For filtration system, save filtered options in a json file. Make the data into a global variable.
-            // Allow users to filter out what race they want as well
-
+            int load = menu2();
         } else if (mainMenuChoice == 3) {
             #if defined(_WIN32) || defined(_WIN64)
                 system("cls");
