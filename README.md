@@ -8,7 +8,7 @@ Program that generates a character profile for the popular tabletop game, Dungeo
 - Race generation ✔️
 - Backstory generation
 - Starter abilities generation
-- Stat generation (Dexterity, Constitution, Strength, etc...)
+- Stat generation (Dexterity, Constitution, Strength, etc...) ✔️
 
 ## Extra features ##
 - Filtration System.
